@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Formulario | PetMatch Mini')}"></head>
+<body>
+    <nav th:replace="~{fragments/navigation :: navigation}"></nav>
+
+    <main class="page-container">
+        <section class="content-panel">
+            <h1 th:text="${editing} ? 'Editar mascota' : 'Registrar mascota'">
+                Formulario de mascota
+            </h1>
+
+            <p class="page-intro">
+                Completa los datos de la mascota. La descripción es opcional.
+            </p>
+
+            <form th:action="${editing} ? @{/pets/{id}(id=${petId})} : @{/pets}"
+                  th:object="${petForm}"
+                  method="post"
+                  novalidate>
+
+                <p class="form-summary" th:if="${#fields.hasAnyErrors()}" role="alert" style="color: red; font-weight: bold;">
+                    Revisa los campos señalados antes de continuar.
+                </p>
+
+                <div class="form-field" style="margin-bottom: 15px;">
+                    <label for="name">Nombre</label><br>
+                    <input id="name" type="text"
+                           th:field="*{name}"
+                           maxlength="100"
+                           th:errorclass="field-error"
+                           th:attr="aria-invalid=${#fields.hasErrors('name')}">
+                    <p class="field-error-message" style="color: red; font-size: 0.9em; margin: 0;"
+                       th:if="${#fields.hasErrors('name')}"
+                       th:errors="*{name}" id="name-error" role="alert"></p>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 15px;">
+                    <label for="species">Especie</label><br>
+                    <input id="species" type="text"
+                           th:field="*{species}"
+                           maxlength="80"
+                           th:errorclass="field-error"
+                           th:attr="aria-invalid=${#fields.hasErrors('species')}">
+                    <p class="field-error-message" style="color: red; font-size: 0.9em; margin: 0;"
+                       th:if="${#fields.hasErrors('species')}"
+                       th:errors="*{species}" id="species-error" role="alert"></p>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 15px;">
+                    <label for="age">Edad en años</label><br>
+                    <input id="age" type="number"
+                           th:field="*{age}"
+                           min="0"
+                           th:errorclass="field-error"
+                           th:attr="aria-invalid=${#fields.hasErrors('age')}">
+                    <p class="field-error-message" style="color: red; font-size: 0.9em; margin: 0;"
+                       th:if="${#fields.hasErrors('age')}"
+                       th:errors="*{age}" id="age-error" role="alert"></p>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 20px;">
+                    <label for="description">Descripción (opcional)</label><br>
+                    <textarea id="description" rows="4" style="width: 100%; max-width: 400px;"
+                              th:field="*{description}"
+                              maxlength="1000"
+                              th:errorclass="field-error"
+                              th:attr="aria-invalid=${#fields.hasErrors('description')}">
+                    </textarea>
+                    <p class="field-error-message" style="color: red; font-size: 0.9em; margin: 0;"
+                       th:if="${#fields.hasErrors('description')}"
+                       th:errors="*{description}"
+                       id="description-error" role="alert"></p>
+                </div>
+
+                <div class="form-actions">
+                    <button class="button-link" type="submit"
+                            th:text="${editing} ? 'Guardar cambios' : 'Registrar mascota'">
+                        Guardar
+                    </button>
+                    <a class="button-link" style="background-color: #58657a;" th:href="@{/pets}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
